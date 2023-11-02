@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { RouterProvider, createBrowserRouter, Link } from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 export function App() {
   const [data, setDate] = React.useState(null);
@@ -16,6 +16,8 @@ export function App() {
       <h1>Game Skeleton</h1>
 
       <pre>{JSON.stringify(data)}</pre>
+
+      <img src="/static/avatars/boys/1.png" />
     </div>
   );
 }
