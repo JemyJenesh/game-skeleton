@@ -1,0 +1,12 @@
+{
+  "name": "game-skeleton",
+  "version": "1.0.0",
+  "description": "MERN app in single folder",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED"
+}
