@@ -11,6 +11,8 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "public")));
 }
 
+app.use("/static", express.static(path.join(__dirname, "public")));
+
 app.get("/api/status", (req, res) => {
   res.json({ ok: true });
 });
