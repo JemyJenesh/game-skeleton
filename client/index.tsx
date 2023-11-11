@@ -1,5 +1,7 @@
+import "@fontsource/inter";
 import React from "react";
 import ReactDOM from "react-dom/client";
+import "./index.css";
 import { App } from "./src/App";
 
 const rootElement = document.querySelector("#root");

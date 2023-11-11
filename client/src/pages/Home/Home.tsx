@@ -1,3 +1,4 @@
+import Typography from "@mui/joy/Typography";
 import React from "react";
 
 export function Home() {
@@ -11,7 +12,7 @@ export function Home() {
 
   return (
     <div>
-      <h1>Game Skeleton</h1>
+      <Typography level="h1">Game Skeleton</Typography>
 
       <pre>{JSON.stringify(data)}</pre>
 
