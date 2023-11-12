@@ -4,7 +4,7 @@
   "description": "MERN app in single folder",
   "main": "index.js",
   "scripts": {
-    "build": "babel server --out-dir build && cp -R server/public build/ && webpack --mode production",
+    "build": "babel server --extensions .ts --out-dir build && cp -R server/public build/ && webpack --mode production",
     "start:server": "nodemon --exec babel-node --extensions .ts server/index.ts",
     "start:client": "webpack serve --mode development",
     "start": "concurrently \"npm run start:server\" \"npm run start:client\"",
