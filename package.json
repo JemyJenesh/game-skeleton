@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "build": "babel server --extensions .ts --out-dir build && cp -R server/public build/ && webpack --mode production",
-    "start:server": "nodemon --exec babel-node --extensions .ts server/index.ts",
+    "start:server": "docker-compose up -d && nodemon --exec babel-node --extensions .ts server/index.ts",
     "start:client": "webpack serve --mode development",
     "start": "concurrently \"npm run start:server\" \"npm run start:client\"",
-    "start:prod": "NODE_ENV=production node build/index.js"
+    "start:prod": "NODE_ENV=production node build/index.js",
+    "stop": "docker-compose down"
   },
   "keywords": [],
   "author": "Jenesh",
