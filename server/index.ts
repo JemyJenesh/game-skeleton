@@ -18,6 +18,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 app.use(cors());
+app.use(express.json());
 app.use(cookieParser());
 app.use("/static", express.static(path.join(__dirname, "public")));
 

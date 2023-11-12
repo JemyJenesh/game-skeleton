@@ -1,8 +1,10 @@
 import "@fontsource/inter";
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import { App } from "./src/App";
+import { PlayerProvider } from "./src/hooks";
 
 const rootElement = document.querySelector("#root");
 if (!rootElement) {
@@ -10,4 +12,10 @@ if (!rootElement) {
 }
 
 const root = ReactDOM.createRoot(rootElement);
-root.render(<App />);
+root.render(
+  <BrowserRouter>
+    <PlayerProvider>
+      <App />
+    </PlayerProvider>
+  </BrowserRouter>
+);

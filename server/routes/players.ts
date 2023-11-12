@@ -7,7 +7,7 @@ export const playersRouter = express.Router();
 playersRouter.get("/me", async (req: Request, res: Response) => {
   const userId = req.cookies.userId;
   if (!userId) {
-    return null;
+    return res.json(null);
   }
 
   const player = await PlayerService.findById(userId);
@@ -18,7 +18,10 @@ playersRouter.get("/me", async (req: Request, res: Response) => {
 playersRouter.post("/", async (req: Request, res: Response) => {
   const playerInput: PlayerInput = req.body;
   const player = await PlayerService.create(playerInput);
-  req.cookies("userId", player.id);
+  res.cookie("userId", player.id, {
+    httpOnly: true,
+    maxAge: 400 * 24 * 3600 * 1000, //100 days
+  });
 
   return res.json(player);
 });

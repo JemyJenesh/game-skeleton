@@ -9,6 +9,7 @@ import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { usePlayer } from "../../hooks";
 import { CheckCircle } from "../../icons";
 import { Avatar, avatars } from "../../utils";
 
@@ -32,6 +33,8 @@ function Avatar({ avatar: { url } }: { avatar: Avatar }) {
 
 export function PlayerCreate() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const { setPlayer } = usePlayer();
 
   const [form, setForm] = useState({
     name: "",
@@ -47,6 +50,23 @@ export function PlayerCreate() {
   };
 
   const handleClick = async () => {
+    setLoading(true);
+    fetch("/api/players", {
+      method: "POST",
+      body: JSON.stringify(form),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setPlayer(data);
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     // await createGame({
     //   variables: {
     //     playerId: player?.id,
@@ -156,7 +176,7 @@ export function PlayerCreate() {
         justifyContent="flex-end"
         alignItems="flex-start"
       >
-        <Button onClick={handleClick} disabled={isDisabled}>
+        <Button onClick={handleClick} loading={loading} disabled={isDisabled}>
           Create
         </Button>
       </Stack>

@@ -1,27 +1,27 @@
 import CssBaseline from "@mui/joy/CssBaseline";
-import React from "react";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
 import { Home, NotFoundPage, PlayerCreate } from "./pages";
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/players/create",
-    element: <PlayerCreate />,
-  },
-  {
-    path: "*",
-    element: <NotFoundPage />,
-  },
-]);
+import { usePlayer } from "./hooks";
 
 export function App() {
+  const { loading, fetchPlayer } = usePlayer();
+  useEffect(() => {
+    fetchPlayer();
+  }, []);
+
+  if (loading) {
+    return <p>...loading</p>;
+  }
+
   return (
-    <CssBaseline>
-      <RouterProvider router={router} />
-    </CssBaseline>
+    <>
+      <CssBaseline />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/players/create" element={<PlayerCreate />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </>
   );
 }
