@@ -10,14 +10,7 @@ import Typography from "@mui/joy/Typography";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CheckCircle } from "../../icons";
-
-type Avatar = { type: "boy" | "girl"; url: string };
-let avatars: Avatar[] = [];
-for (let i = 1; i <= 10; i++) {
-  avatars.push({ url: `/static/avatars/boys/${i}.png`, type: "boy" });
-
-  avatars.push({ url: `/static/avatars/girls/${i}.png`, type: "girl" });
-}
+import { Avatar, avatars } from "../../utils";
 
 function Avatar({ avatar: { url } }: { avatar: Avatar }) {
   return (
