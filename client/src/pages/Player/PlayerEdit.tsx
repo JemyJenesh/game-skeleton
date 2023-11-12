@@ -9,6 +9,7 @@ import Sheet from "@mui/joy/Sheet";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import React, { useState } from "react";
+import { PageTransition } from "../../components";
 import { usePlayer } from "../../hooks";
 import { avatars } from "../../utils";
 import { PlayerAvatar } from "./components";
@@ -72,103 +73,105 @@ export function PlayerEdit() {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: 3,
-      }}
-    >
-      {renderSnackbar()}
-      <Stack
-        sx={{ width: "100%", py: 3, boxShadow: "xs", background: "white" }}
-        direction="column"
-        alignItems="center"
-        spacing={3}
+    <PageTransition>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 3,
+        }}
       >
-        <Typography sx={{ width: 435 }} fontSize={"1.5rem"}>
-          Update your profile
-        </Typography>
-        <Stack spacing={1} sx={{ width: 435 }}>
-          <FormLabel>Your name</FormLabel>
-          <Input
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            autoFocus
-            variant="outlined"
-          />
-        </Stack>
-      </Stack>
-
-      <Stack spacing={1}>
-        <FormLabel>Change your avatar</FormLabel>
-        <Sheet
-          variant="outlined"
-          sx={{
-            width: 435,
-            borderRadius: "sm",
-            p: 1,
-          }}
+        {renderSnackbar()}
+        <Stack
+          sx={{ width: "100%", py: 3, boxShadow: "xs", background: "white" }}
+          direction="column"
+          alignItems="center"
+          spacing={3}
         >
-          <RadioGroup
-            overlay
-            name="avatar"
-            onChange={handleChange}
-            defaultValue={player?.avatar}
+          <Typography sx={{ width: 435 }} fontSize={"1.5rem"}>
+            Update your profile
+          </Typography>
+          <Stack spacing={1} sx={{ width: 435 }}>
+            <FormLabel>Your name</FormLabel>
+            <Input
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              autoFocus
+              variant="outlined"
+            />
+          </Stack>
+        </Stack>
+
+        <Stack spacing={1}>
+          <FormLabel>Change your avatar</FormLabel>
+          <Sheet
+            variant="outlined"
             sx={{
-              gap: 2,
-              [`& .${radioClasses.checked}`]: {
-                [`& .${radioClasses.action}`]: {
-                  inset: -1,
-                  border: "3px solid",
-                  borderColor: "primary.500",
-                },
-              },
-              [`& .${radioClasses.radio}`]: {
-                display: "contents",
-                "& > svg": {
-                  zIndex: 2,
-                  position: "absolute",
-                  top: "-8px",
-                  right: "-8px",
-                  bgcolor: "background.surface",
-                  borderRadius: "50%",
-                },
-              },
+              width: 435,
+              borderRadius: "sm",
+              p: 1,
             }}
           >
-            <Stack direction={"row"} gap={1} flexWrap="wrap">
-              {avatars
-                ?.filter((a) => a.type === "boy")
-                ?.map((avatar) => (
-                  <PlayerAvatar key={avatar.url} avatar={avatar} />
-                ))}
-            </Stack>
-            <Stack direction={"row"} gap={1} flexWrap="wrap">
-              {avatars
-                ?.filter((a) => a.type === "girl")
-                ?.map((avatar) => (
-                  <PlayerAvatar key={avatar.url} avatar={avatar} />
-                ))}
-            </Stack>
-          </RadioGroup>
-        </Sheet>
-      </Stack>
+            <RadioGroup
+              overlay
+              name="avatar"
+              onChange={handleChange}
+              defaultValue={player?.avatar}
+              sx={{
+                gap: 2,
+                [`& .${radioClasses.checked}`]: {
+                  [`& .${radioClasses.action}`]: {
+                    inset: -1,
+                    border: "3px solid",
+                    borderColor: "primary.500",
+                  },
+                },
+                [`& .${radioClasses.radio}`]: {
+                  display: "contents",
+                  "& > svg": {
+                    zIndex: 2,
+                    position: "absolute",
+                    top: "-8px",
+                    right: "-8px",
+                    bgcolor: "background.surface",
+                    borderRadius: "50%",
+                  },
+                },
+              }}
+            >
+              <Stack direction={"row"} gap={1} flexWrap="wrap">
+                {avatars
+                  ?.filter((a) => a.type === "boy")
+                  ?.map((avatar) => (
+                    <PlayerAvatar key={avatar.url} avatar={avatar} />
+                  ))}
+              </Stack>
+              <Stack direction={"row"} gap={1} flexWrap="wrap">
+                {avatars
+                  ?.filter((a) => a.type === "girl")
+                  ?.map((avatar) => (
+                    <PlayerAvatar key={avatar.url} avatar={avatar} />
+                  ))}
+              </Stack>
+            </RadioGroup>
+          </Sheet>
+        </Stack>
 
-      <Stack
-        sx={{
-          width: 360,
-        }}
-        direction="row"
-        justifyContent="flex-end"
-        alignItems="flex-start"
-      >
-        <Button onClick={handleClick} loading={loading} disabled={isDisabled}>
-          Update
-        </Button>
-      </Stack>
-    </Box>
+        <Stack
+          sx={{
+            width: 360,
+          }}
+          direction="row"
+          justifyContent="flex-end"
+          alignItems="flex-start"
+        >
+          <Button onClick={handleClick} loading={loading} disabled={isDisabled}>
+            Update
+          </Button>
+        </Stack>
+      </Box>
+    </PageTransition>
   );
 }
