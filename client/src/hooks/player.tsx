@@ -25,7 +25,6 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
     fetch("/api/players/me")
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         if (!data) {
           navigate("/players/create");
         }
