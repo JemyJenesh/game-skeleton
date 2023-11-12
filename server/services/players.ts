@@ -8,4 +8,8 @@ export const PlayerService = {
   async create(playerInput: PlayerInput) {
     return await Player.create(playerInput);
   },
+
+  async update(id: string, playerInput: PlayerInput) {
+    return await Player.findByIdAndUpdate(id, playerInput, { new: true });
+  },
 };
