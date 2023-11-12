@@ -1,7 +1,7 @@
 import CssBaseline from "@mui/joy/CssBaseline";
 import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
-import { Home, NotFoundPage, PlayerCreate } from "./pages";
+import { Home, NotFoundPage, PlayerCreate, PlayerView } from "./pages";
 import { usePlayer } from "./hooks";
 
 export function App() {
@@ -20,6 +20,7 @@ export function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/players/create" element={<PlayerCreate />} />
+        <Route path="/players/me" element={<PlayerView />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>
