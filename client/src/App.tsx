@@ -1,8 +1,8 @@
 import CssBaseline from "@mui/joy/CssBaseline";
 import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
-import { Home, NotFoundPage, PlayerCreate, PlayerView } from "./pages";
 import { usePlayer } from "./hooks";
+import { Home, NotFoundPage, PlayerCreate, PlayerView } from "./pages";
 
 export function App() {
   const { loading, fetchPlayer } = usePlayer();

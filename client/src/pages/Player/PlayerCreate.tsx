@@ -2,7 +2,7 @@ import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
 import FormLabel from "@mui/joy/FormLabel";
 import Input from "@mui/joy/Input";
-import Radio, { radioClasses } from "@mui/joy/Radio";
+import { radioClasses } from "@mui/joy/Radio";
 import RadioGroup from "@mui/joy/RadioGroup";
 import Sheet from "@mui/joy/Sheet";
 import Stack from "@mui/joy/Stack";
@@ -10,26 +10,8 @@ import Typography from "@mui/joy/Typography";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePlayer } from "../../hooks";
-import { CheckCircle } from "../../icons";
-import { Avatar, avatars } from "../../utils";
-
-function Avatar({ avatar: { url } }: { avatar: Avatar }) {
-  return (
-    <Sheet
-      variant="outlined"
-      sx={{
-        borderRadius: "100%",
-        boxShadow: "sm",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
-      <Radio id={url} value={url} checkedIcon={<CheckCircle />} />
-      <img height={75} width={75} src={url} />
-    </Sheet>
-  );
-}
+import { avatars } from "../../utils";
+import { PlayerAvatar } from "./components";
 
 export function PlayerCreate() {
   const navigate = useNavigate();
@@ -67,21 +49,6 @@ export function PlayerCreate() {
       .catch((err) => {
         console.log(err);
       });
-    // await createGame({
-    //   variables: {
-    //     playerId: player?.id,
-    //     name: form.name,
-    //     mode: form.mode,
-    //     pattern: form.mode === "custom" ? pattern : null,
-    //     free: form.free,
-    //   },
-    //   onCompleted: (data) => {
-    //     const game = data?.createGame;
-    //     if (game) {
-    //       navigate(`/game/${game.id}`);
-    //     }
-    //   },
-    // });
   };
 
   return (
@@ -154,14 +121,14 @@ export function PlayerCreate() {
               {avatars
                 ?.filter((a) => a.type === "boy")
                 ?.map((avatar) => (
-                  <Avatar key={avatar.url} avatar={avatar} />
+                  <PlayerAvatar key={avatar.url} avatar={avatar} />
                 ))}
             </Stack>
             <Stack direction={"row"} gap={1} flexWrap="wrap">
               {avatars
                 ?.filter((a) => a.type === "girl")
                 ?.map((avatar) => (
-                  <Avatar key={avatar.url} avatar={avatar} />
+                  <PlayerAvatar key={avatar.url} avatar={avatar} />
                 ))}
             </Stack>
           </RadioGroup>
