@@ -1,10 +1,12 @@
+import Box from "@mui/joy/Box";
+import Typography from "@mui/joy/Typography";
 import React from "react";
 
 export function NotFoundPage() {
   return (
-    <div>
-      <h1>404 not found</h1>
-      <p>The page you are looking for doesn't exist.</p>
-    </div>
+    <Box sx={{ textAlign: "center", p: 2 }}>
+      <Typography level="h1">Page not found</Typography>
+      <Typography>The page you are looking for doesn't exist.</Typography>
+    </Box>
   );
 }
