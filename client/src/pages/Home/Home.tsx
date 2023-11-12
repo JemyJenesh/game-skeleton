@@ -1,22 +1,18 @@
+import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import React from "react";
+import { usePlayer } from "../../hooks";
+import { PlayerCard } from "./components";
 
 export function Home() {
-  const [data, setDate] = React.useState(null);
-
-  React.useEffect(() => {
-    fetch("/api/status")
-      .then((res) => res.json())
-      .then((data) => setDate(data));
-  }, []);
+  const { player } = usePlayer();
 
   return (
-    <div>
-      <Typography level="h1">Game Skeleton</Typography>
-
-      <pre>{JSON.stringify(data)}</pre>
-
-      <img src="/static/avatars/boys/1.png" />
-    </div>
+    <Stack sx={{ p: 3, gap: 3 }} alignItems="center">
+      <Typography level="h2">Hi {player?.name}!</Typography>
+      <Stack>
+        <PlayerCard player={player!} />
+      </Stack>
+    </Stack>
   );
 }

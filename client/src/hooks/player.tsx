@@ -1,15 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-type Player = {
-  name: string;
-  avatar: string;
-  tag: "creator" | "player";
-  wins: number;
-  played: number;
-  createdAt: Date | string;
-  updatedAt: Date | string;
-};
+import { Player } from "../types";
 
 type ContextProps = {
   player: Player | null;
