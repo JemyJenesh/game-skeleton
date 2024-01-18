@@ -5,8 +5,8 @@ import CardActions from "@mui/joy/CardActions";
 import CardContent from "@mui/joy/CardContent";
 import Typography from "@mui/joy/Typography";
 import * as React from "react";
-import { Player } from "../../../types";
 import { useNavigate } from "react-router-dom";
+import { Player } from "../../../types";
 
 export function PlayerCard({ player }: { player: Player }) {
   const { avatar, name } = player;
