@@ -6,7 +6,7 @@ import { Outlet } from "react-router-dom";
 import { io } from "socket.io-client";
 import { usePlayer } from "./hooks";
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 const wsUrl =
   process.env.NODE_ENV === "production" ? "" : "http://localhost:3001";
 const socket = io(wsUrl);

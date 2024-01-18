@@ -10,6 +10,7 @@ import {
   PlayerEdit,
   PlayerView,
   TypingPractice,
+  UnoRoom,
 } from "../pages";
 
 export const router = createBrowserRouter([
@@ -42,6 +43,10 @@ export const router = createBrowserRouter([
         path: "/typing",
         loader: wordsLoader,
         element: <TypingPractice />,
+      },
+      {
+        path: "/uno/:id/room",
+        element: <UnoRoom />,
       },
 
       {
