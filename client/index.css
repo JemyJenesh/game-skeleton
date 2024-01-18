@@ -4,3 +4,6 @@ body,
   height: 100%;
   background-color: #fbfbfb;
 }
+img {
+  user-select: none;
+}

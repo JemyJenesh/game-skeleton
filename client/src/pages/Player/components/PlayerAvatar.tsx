@@ -1,7 +1,7 @@
 import Radio from "@mui/joy/Radio";
 import Sheet from "@mui/joy/Sheet";
 import React from "react";
-import { CheckCircle } from "../../../icons";
+import { CheckCircleIcon } from "../../../icons";
 import { Avatar } from "../../../utils";
 
 export function PlayerAvatar({ avatar: { url } }: { avatar: Avatar }) {
@@ -16,7 +16,7 @@ export function PlayerAvatar({ avatar: { url } }: { avatar: Avatar }) {
         alignItems: "center",
       }}
     >
-      <Radio id={url} value={url} checkedIcon={<CheckCircle />} />
+      <Radio id={url} value={url} checkedIcon={<CheckCircleIcon />} />
       <img height={75} width={75} src={url} />
     </Sheet>
   );
