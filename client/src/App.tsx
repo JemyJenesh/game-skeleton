@@ -9,13 +9,12 @@ import { usePlayer } from "./hooks";
 export const queryClient = new QueryClient();
 const wsUrl =
   process.env.NODE_ENV === "production" ? "" : "http://localhost:3001";
-const socket = io(wsUrl);
+export const clientSocket = io(wsUrl);
 
 export function App() {
   const { loading, fetchPlayer } = usePlayer();
   useEffect(() => {
     fetchPlayer();
-    socket.emit("chat", { name: "jen" });
   }, []);
 
   if (loading) {

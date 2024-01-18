@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
-import { UnoService } from "../services";
+import { PlayerService, UnoService } from "../services";
+import { getServerSocket } from "../services/socket";
 
 export const unosRouter = express.Router();
 
@@ -25,6 +26,8 @@ unosRouter.post("/", async (req: Request, res: Response) => {
 
 unosRouter.post("/:id/join", async (req: Request, res: Response) => {
   const id = req.params.id;
+  const io = getServerSocket();
+
   const playerId = req.cookies.playerId;
   if (!playerId) {
     return res.json(null);
@@ -33,6 +36,9 @@ unosRouter.post("/:id/join", async (req: Request, res: Response) => {
   if (!id) return res.status(400).json({ message: "id is missing" });
 
   const uno = await UnoService.join(id, playerId);
+  const player = await PlayerService.findById(playerId);
+
+  io.emit(`player-joined_${id}`, player);
 
   return res.json(uno);
 });

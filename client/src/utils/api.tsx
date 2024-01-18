@@ -5,7 +5,7 @@ const axios = Axios.create({
   withCredentials: true,
 });
 
-type Uno = {
+export type Uno = {
   _id: string;
   players: Player[];
   winner: any;
