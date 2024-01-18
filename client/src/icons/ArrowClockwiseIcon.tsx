@@ -1,11 +1,12 @@
 import React from "react";
+import { IconProps } from ".";
 
-export function ArrowClockwiseIcon() {
+export function ArrowClockwiseIcon({ size = 16 }: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
+      width={size}
+      height={size}
       fill="currentColor"
       className="bi bi-arrow-clockwise"
       viewBox="0 0 16 16"
