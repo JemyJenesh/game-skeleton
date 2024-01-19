@@ -103,14 +103,24 @@ export function UnoRoom() {
             </IconButton>
           )}
         </Stack>
-        {showStart && (
+        <Stack direction={"row"} gap={3}>
           <Button
-            disabled={!canStart}
-            onClick={() => serveMutation.mutate(id!)}
+            variant="soft"
+            onClick={() => {
+              navigator.clipboard.writeText(window.location.href);
+            }}
           >
-            Start Game
+            Share Link
           </Button>
-        )}
+          {showStart && (
+            <Button
+              disabled={!canStart}
+              onClick={() => serveMutation.mutate(id!)}
+            >
+              Start Game
+            </Button>
+          )}
+        </Stack>
       </Stack>
     </PageTransition>
   );
