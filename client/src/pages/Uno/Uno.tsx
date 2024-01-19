@@ -1,4 +1,4 @@
-import { Box, Stack } from "@mui/joy";
+import { Box, Stack, Typography } from "@mui/joy";
 import React, { useEffect } from "react";
 import { Flipped, Flipper } from "react-flip-toolkit";
 import { useQuery } from "react-query";
@@ -243,38 +243,49 @@ function PlayersSeat() {
   const hands = useUnoGameStore((state) => state.hands);
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Stack
-        direction="row"
-        sx={{ justifyContent: "space-around", alignItems: "center" }}
-      >
-        {playersInOrder.map((player, i) => (
-          <Box
-            key={player._id}
-            sx={{
-              display: player._id === currentPlayer?._id ? "none" : "block",
-            }}
-          >
+    <Stack
+      direction="row"
+      sx={{
+        width: "100%",
+        px: 3,
+        py: 2,
+        justifyContent: "space-around",
+        alignItems: "center",
+      }}
+      gap={3}
+    >
+      {playersInOrder.map((player, i) => (
+        <Stack
+          key={player._id}
+          direction={"row"}
+          sx={{
+            display: player._id === currentPlayer?._id ? "none" : "flex",
+          }}
+          gap={2}
+        >
+          <Stack>
             <img src={player.avatar} style={{ width: 50, height: 50 }} />
-            <Box key={player._id}>
-              {hands[(i + playerIndex) % players.length]?.map((card) => (
-                <Box
-                  key={card._id}
-                  sx={{
-                    display: "inline-block",
-                    transition: "transform 0.2s",
-                    "&:not(:first-of-type)": {
-                      marginLeft: "-50px",
-                    },
-                  }}
-                >
-                  <Card card={card} isFlipped />
-                </Box>
-              ))}
-            </Box>
+            <Typography>{player.name}</Typography>
+          </Stack>
+
+          <Box>
+            {hands[(i + playerIndex) % players.length]?.map((card) => (
+              <Box
+                key={card._id}
+                sx={{
+                  display: "inline-block",
+                  transition: "transform 0.2s",
+                  "&:not(:first-of-type)": {
+                    marginLeft: "-65px",
+                  },
+                }}
+              >
+                <Card card={card} />
+              </Box>
+            ))}
           </Box>
-        ))}
-      </Stack>
-    </Box>
+        </Stack>
+      ))}
+    </Stack>
   );
 }

@@ -11,6 +11,10 @@ unosRouter.get("/:id", async (req: Request, res: Response) => {
 
   const uno = await UnoService.findById(id);
 
+  if (!uno) {
+    return res.status(404).end();
+  }
+
   return res.json(uno);
 });
 
