@@ -26,7 +26,8 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
       .then((res) => res.json())
       .then((data) => {
         if (!data) {
-          navigate("/players/create");
+          const pathname = window.location.pathname;
+          navigate(`/players/create${pathname ? `?r=${pathname}` : ""}`);
         }
         setPlayer(data);
       })
