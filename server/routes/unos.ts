@@ -42,3 +42,14 @@ unosRouter.post("/:id/join", async (req: Request, res: Response) => {
 
   return res.json(uno);
 });
+
+unosRouter.put("/:id/serve", async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const io = getServerSocket();
+
+  if (!id) return res.status(400).json({ message: "id is missing" });
+  const uno = await UnoService.update(id, { state: "serving" });
+  io.emit(`uno-serve_${id}`);
+
+  return res.json(uno);
+});

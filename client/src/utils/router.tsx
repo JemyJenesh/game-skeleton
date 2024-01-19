@@ -45,7 +45,7 @@ export const router = createBrowserRouter([
         element: <TypingPractice />,
       },
       {
-        path: "/uno/:id/room",
+        path: "/unos/:id/room",
         element: <UnoRoom />,
       },
 

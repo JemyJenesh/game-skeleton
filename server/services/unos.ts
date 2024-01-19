@@ -1,4 +1,4 @@
-import { Uno } from "../models";
+import { Uno, UnoUpdateInput } from "../models";
 
 export const UnoService = {
   async findById(id: string) {
@@ -9,6 +9,10 @@ export const UnoService = {
     return await Uno.create({
       players: [playerId],
     });
+  },
+
+  async update(id: string, uno: UnoUpdateInput) {
+    return await Uno.findByIdAndUpdate(id, uno);
   },
 
   async join(id: string, playerId: string) {

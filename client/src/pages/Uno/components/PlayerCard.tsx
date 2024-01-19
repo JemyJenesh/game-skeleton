@@ -9,10 +9,11 @@ import { Player } from "../../../types";
 export function PlayerCard({ player }: { player: Player }) {
   const { _id, avatar, name } = player;
   const { player: currentPlayer } = usePlayer();
+  const isMe = currentPlayer?._id === _id;
 
   return (
     <Card
-      variant="outlined"
+      variant={isMe ? "soft" : "outlined"}
       sx={{
         width: 200,
       }}
@@ -28,7 +29,7 @@ export function PlayerCard({ player }: { player: Player }) {
       </Box>
       <CardContent>
         <Typography textAlign="center" level="title-md">
-          {currentPlayer?._id === _id ? "You" : name}
+          {isMe ? "You" : name}
         </Typography>
       </CardContent>
     </Card>

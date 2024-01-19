@@ -10,6 +10,8 @@ export type UnoCreateInput = {
   playerId: Types.ObjectId;
 };
 
+export type UnoUpdateInput = Partial<IUno>;
+
 const UnoSchema = new Schema<IUno>({
   players: [{ type: Schema.Types.ObjectId, ref: "Player" }],
   winner: { type: Schema.Types.ObjectId, ref: "Player" },

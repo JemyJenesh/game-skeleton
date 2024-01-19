@@ -13,7 +13,7 @@ function useCreateUno() {
   const mutation: UseMutationResult = useMutation({
     mutationFn: createUno,
     onSuccess: (data) => {
-      if (data._id) navigate(`/uno/${data._id}/room`);
+      if (data._id) navigate(`/unos/${data._id}/room`);
     },
   });
 
