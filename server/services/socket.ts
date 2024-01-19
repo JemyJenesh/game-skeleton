@@ -11,6 +11,13 @@ export function initSocket(server: NodeServer) {
     },
   });
   serverSocket = io;
+
+  io.on("connection", (socket) => {
+    socket.on("order-serve-card", (unoId) => {
+      console.log(unoId);
+      socket.emit(`serve-card_${unoId}`);
+    });
+  });
 }
 
 export function getServerSocket() {

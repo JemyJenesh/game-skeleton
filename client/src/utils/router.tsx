@@ -10,6 +10,7 @@ import {
   PlayerEdit,
   PlayerView,
   TypingPractice,
+  Uno,
   UnoRoom,
 } from "../pages";
 
@@ -43,6 +44,11 @@ export const router = createBrowserRouter([
         path: "/typing",
         loader: wordsLoader,
         element: <TypingPractice />,
+      },
+
+      {
+        path: "/unos/:id",
+        element: <Uno />,
       },
       {
         path: "/unos/:id/room",

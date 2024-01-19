@@ -53,3 +53,16 @@ unosRouter.put("/:id/serve", async (req: Request, res: Response) => {
 
   return res.json(uno);
 });
+
+unosRouter.put("/:id", async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const body = req.body;
+  const io = getServerSocket();
+
+  if (!id || !body)
+    return res.status(400).json({ message: "id or body missing" });
+  const uno = await UnoService.update(id, body);
+  io.emit(`uno-update_${id}`);
+
+  return res.json(uno);
+});

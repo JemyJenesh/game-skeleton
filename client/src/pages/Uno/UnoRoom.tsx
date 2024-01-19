@@ -1,12 +1,13 @@
 import { Button, IconButton, Stack, Typography } from "@mui/joy";
 import React, { useEffect } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { clientSocket, queryClient } from "../../App";
 import { PageTransition } from "../../components";
 import { usePlayer } from "../../hooks";
+import { useUno } from "../../hooks/uno";
 import { PlusIcon } from "../../icons";
-import { Uno, getUno, joinUno, serveCard } from "../../utils/api";
+import { Uno, joinUno, serveCard } from "../../utils/api";
 import { PlayerCard } from "./components";
 
 function useJoinUno(id: string) {
@@ -34,10 +35,7 @@ function useServeUno(id: string) {
 
 export function UnoRoom() {
   const { id } = useParams();
-  const { isLoading, isError, data } = useQuery({
-    queryKey: ["unos", id],
-    queryFn: () => getUno(id!),
-  });
+  const { isLoading, isError, data } = useUno();
   const joinMutation = useJoinUno(id!);
   const serveMutation = useServeUno(id!);
   const { player } = usePlayer();
@@ -62,9 +60,9 @@ export function UnoRoom() {
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error! Something went wrong!</p>;
-  if (!data) return <Navigate to="/" />;
-  const { players = [], state } = data;
-  const isInGame = !!data.players?.find((p) => p._id === player?._id);
+
+  const { players = [], state } = data!;
+  const isInGame = players.find((p) => p._id === player?._id);
   if (isInGame && (state === "playing" || state === "serving"))
     return <Navigate to={`/unos/${id}`} />;
 
