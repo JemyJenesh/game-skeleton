@@ -27,7 +27,11 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
       .then((data) => {
         if (!data) {
           const pathname = window.location.pathname;
-          navigate(`/players/create${pathname ? `?r=${pathname}` : ""}`);
+          navigate(
+            `/players/create${
+              pathname.includes("/unos") ? `?r=${pathname}` : ""
+            }`
+          );
         }
         setPlayer(data);
       })
