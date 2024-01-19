@@ -85,3 +85,16 @@ export async function drawCard(id: string): Promise<Uno> {
   const res = await axios.put(`/api/unos/${id}/draw`);
   return res.data;
 }
+
+export async function discardCard({
+  id,
+  card,
+}: {
+  id: string;
+  card: UnoCard;
+}): Promise<Uno> {
+  const res = await axios.put(`/api/unos/${id}/discard`, {
+    card,
+  });
+  return res.data;
+}

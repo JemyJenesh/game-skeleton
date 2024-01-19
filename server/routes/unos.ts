@@ -70,19 +70,25 @@ unosRouter.put("/:id/draw", async (req: Request, res: Response) => {
   const uno = await UnoService.findById(id);
   if (!uno) return res.status(404).end();
 
-  const { deck = [], players = [], hands = [] } = uno;
+  const { deck = [], players = [], hands = [], turn } = uno;
   if (deck.length) {
     const card = deck.pop()!;
     const playerIndex = players.findIndex((p) => p._id.toString() === playerId);
+
+    if (playerIndex !== turn) {
+      return res.json(uno);
+    }
+
     const playerHand = [...hands[playerIndex], card];
     const newHands = hands.map((hand, i) =>
       i === playerIndex ? playerHand : hand
     );
-    const turn = (uno.turn + uno.direction + players.length) % players.length;
+    const newTurn =
+      (uno.turn + uno.direction + players.length) % players.length;
     const updatedUno = await UnoService.update(uno.id, {
       deck,
       hands: newHands,
-      turn,
+      turn: newTurn,
     });
     io.emit(`uno-updated_${id}`, updatedUno);
 
@@ -90,6 +96,45 @@ unosRouter.put("/:id/draw", async (req: Request, res: Response) => {
   }
 
   return res.json(null);
+});
+
+unosRouter.put("/:id/discard", async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const discardedCard = req.body.card;
+  const io = getServerSocket();
+  const playerId = req.cookies.playerId;
+  if (!playerId) {
+    return res.json(null);
+  }
+  if (!id) return res.status(400).json({ message: "id is missing" });
+
+  const uno = await UnoService.findById(id);
+  if (!uno) return res.status(404).end();
+
+  const { pile = [], players = [], hands = [], turn } = uno;
+  const playerIndex = players.findIndex((p) => p._id.toString() === playerId);
+  if (playerIndex !== turn) {
+    return res.json(uno);
+  }
+
+  const playerHand = hands[playerIndex]?.filter(
+    (card) => (card as any)._id.toString() !== discardedCard._id
+  );
+  const won = playerHand.length === 0;
+  const newHands = hands.map((hand, i) =>
+    i === playerIndex ? playerHand : hand
+  );
+  const newTurn = (turn + uno.direction + players.length) % players.length;
+  const updatedUno = await UnoService.update(id, {
+    pile: [...pile, discardedCard],
+    hands: newHands,
+    turn: newTurn,
+    winner: won ? playerId : uno.winner,
+    state: won ? "over" : uno.state,
+  });
+  io.emit(`uno-updated_${id}`, updatedUno);
+
+  return res.json(updatedUno);
 });
 
 unosRouter.put("/:id", async (req: Request, res: Response) => {
@@ -100,7 +145,7 @@ unosRouter.put("/:id", async (req: Request, res: Response) => {
   if (!id || !body)
     return res.status(400).json({ message: "id or body missing" });
   const uno = await UnoService.update(id, body);
-  io.emit(`uno-update_${id}`);
+  io.emit(`uno-updated_${id}`, uno);
 
   return res.json(uno);
 });

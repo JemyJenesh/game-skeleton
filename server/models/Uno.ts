@@ -48,7 +48,6 @@ export type UnoCreateInput = {
 export type UnoUpdateInput = Partial<IUno>;
 
 const UnoCardSchema = {
-  id: { type: String },
   color: { type: String },
   value: { type: String },
   name: { type: String },

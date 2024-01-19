@@ -46,7 +46,7 @@ function shuffleDeck(deck: UnoCard[]) {
 
 export const UnoService = {
   async findById(id: string) {
-    return await Uno.findById(id).populate("players");
+    return await Uno.findById(id).populate(["players", "winner"]);
   },
 
   async create(playerId: string) {
@@ -57,9 +57,10 @@ export const UnoService = {
   },
 
   async update(id: string, uno: UnoUpdateInput) {
-    return await Uno.findByIdAndUpdate(id, uno, { new: true }).populate(
-      "players"
-    );
+    return await Uno.findByIdAndUpdate(id, uno, { new: true }).populate([
+      "players",
+      "winner",
+    ]);
   },
 
   async join(id: string, playerId: string) {

@@ -7,7 +7,7 @@ import { clientSocket } from "../../App";
 import { PageTransition } from "../../components";
 import { usePlayer } from "../../hooks";
 import { ArrowClockwiseIcon } from "../../icons";
-import { Uno, UnoCard, drawCard, getUno } from "../../utils/api";
+import { Uno, UnoCard, discardCard, drawCard, getUno } from "../../utils/api";
 import { useUnoGameStore } from "../../utils/uno";
 
 const sleep = (delay: number) =>
@@ -25,8 +25,6 @@ function Card({
   const name = card.name;
   const handleClick = async () => {
     discard?.(card);
-    // await sleep(5000);
-    // nextPlayer();
   };
 
   return (
@@ -40,9 +38,36 @@ function Card({
   );
 }
 
+function useDiscardCard() {
+  const mutation = useMutation({
+    mutationFn: discardCard,
+  });
+
+  return mutation;
+}
+
 function PlayerCards({ cards }: { cards: UnoCard[] }) {
-  // const playerIndex = useUnoGameStore((state) => state.playerIndex);
-  // const discard = useUnoGameStore((state) => state.discard);
+  const unoId = useUnoGameStore((state) => state._id);
+  const winner = useUnoGameStore((state) => state.winner);
+  const state = useUnoGameStore((state) => state.state);
+  const pile = useUnoGameStore((state) => state.pile);
+  const playingCard = pile[pile.length - 1];
+  const players = useUnoGameStore((state) => state.players);
+  const turn = useUnoGameStore((state) => state.turn);
+  const { player } = usePlayer();
+
+  const playerIndex = players.findIndex((p) => p._id === player?._id);
+
+  const mutation = useDiscardCard();
+  const discard = (card: UnoCard) => {
+    if (!!winner || state !== "playing") return;
+    if (
+      turn === playerIndex &&
+      (playingCard.color === card.color || playingCard.value === card.value)
+    ) {
+      mutation.mutate({ id: unoId, card });
+    }
+  };
 
   return (
     <Box>
@@ -64,7 +89,7 @@ function PlayerCards({ cards }: { cards: UnoCard[] }) {
               },
             }}
           >
-            <Card card={card} isFlipped />
+            <Card card={card} isFlipped discard={discard} />
           </Box>
         ))}
       </Stack>
@@ -77,6 +102,8 @@ export function Uno() {
   const { player } = usePlayer();
   const navigate = useNavigate();
 
+  const state = useUnoGameStore((state) => state.state);
+  const winner = useUnoGameStore((state) => state.winner);
   const players = useUnoGameStore((state) => state.players);
   const turn = useUnoGameStore((state) => state.turn);
   const hands = useUnoGameStore((state) => state.hands);
@@ -161,7 +188,12 @@ export function Uno() {
           justifyContent="space-between"
         >
           <PlayersSeat />
-          <Typography level="body-lg">{turnPlayerName} turn</Typography>
+          {state === "playing" && (
+            <Typography level="body-lg">{turnPlayerName} turn</Typography>
+          )}
+          {!!winner && (
+            <Typography level="body-lg">{winner.name} won the game!</Typography>
+          )}
           <Stack
             direction="row"
             gap={10}
@@ -196,6 +228,8 @@ function useDrawCard() {
 
 function DrawPile() {
   const unoId = useUnoGameStore((state) => state._id);
+  const winner = useUnoGameStore((state) => state.winner);
+  const state = useUnoGameStore((state) => state.state);
   const deck = useUnoGameStore((state) => state.deck);
   const turn = useUnoGameStore((state) => state.turn);
   const players = useUnoGameStore((state) => state.players);
@@ -203,6 +237,7 @@ function DrawPile() {
   const canDraw = turn === players.findIndex((p) => p._id === player?._id);
   const mutation = useDrawCard();
   const draw = () => {
+    if (!!winner || state !== "playing") return;
     if (canDraw) {
       mutation.mutate(unoId);
     }
@@ -275,6 +310,7 @@ function DiscardPile() {
 }
 
 function PlayersSeat() {
+  const winner = useUnoGameStore((state) => state.winner);
   const players = useUnoGameStore((state) => state.players);
   const turn = useUnoGameStore((state) => state.turn);
   const turnPlayer = players[turn];
@@ -333,7 +369,7 @@ function PlayersSeat() {
                   },
                 }}
               >
-                <Card card={card} />
+                <Card card={card} isFlipped={winner ? true : false} />
               </Box>
             ))}
           </Box>
