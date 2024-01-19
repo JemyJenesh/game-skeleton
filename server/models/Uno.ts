@@ -59,7 +59,7 @@ const UnoSchema = new Schema<IUno>({
   pile: [UnoCardSchema],
   hands: [[UnoCardSchema]],
   turn: { type: Number, default: 0 },
-  direction: { type: Number, default: -1 },
+  direction: { type: Number, default: 1 },
   state: { type: String, default: "waiting" },
   winner: { type: Schema.Types.ObjectId, ref: "Player" },
   players: [{ type: Schema.Types.ObjectId, ref: "Player" }],

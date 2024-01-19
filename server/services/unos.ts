@@ -57,7 +57,9 @@ export const UnoService = {
   },
 
   async update(id: string, uno: UnoUpdateInput) {
-    return await Uno.findByIdAndUpdate(id, uno);
+    return await Uno.findByIdAndUpdate(id, uno, { new: true }).populate(
+      "players"
+    );
   },
 
   async join(id: string, playerId: string) {
@@ -67,6 +69,6 @@ export const UnoService = {
         $push: { players: playerId },
       },
       { new: true }
-    );
+    ).populate("players");
   },
 };

@@ -80,3 +80,8 @@ export async function serveCard(id: string): Promise<Uno> {
   const res = await axios.put(`/api/unos/${id}/serve`);
   return res.data;
 }
+
+export async function drawCard(id: string): Promise<Uno> {
+  const res = await axios.put(`/api/unos/${id}/draw`);
+  return res.data;
+}

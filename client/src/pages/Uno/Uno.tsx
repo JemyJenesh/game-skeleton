@@ -1,13 +1,13 @@
 import { Box, Stack, Typography } from "@mui/joy";
 import React, { useEffect } from "react";
 import { Flipped, Flipper } from "react-flip-toolkit";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { clientSocket } from "../../App";
 import { PageTransition } from "../../components";
 import { usePlayer } from "../../hooks";
 import { ArrowClockwiseIcon } from "../../icons";
-import { UnoCard, getUno } from "../../utils/api";
+import { Uno, UnoCard, drawCard, getUno } from "../../utils/api";
 import { useUnoGameStore } from "../../utils/uno";
 
 const sleep = (delay: number) =>
@@ -75,16 +75,19 @@ function PlayerCards({ cards }: { cards: UnoCard[] }) {
 export function Uno() {
   const { id } = useParams();
   const { player } = usePlayer();
+  const navigate = useNavigate();
+
+  const players = useUnoGameStore((state) => state.players);
+  const turn = useUnoGameStore((state) => state.turn);
+  const hands = useUnoGameStore((state) => state.hands);
+  const turnPlayer = players[turn];
+  const turnPlayerName =
+    turnPlayer?._id === player?._id ? "Your" : turnPlayer?.name;
 
   const init = useUnoGameStore((state) => state.init);
-  const players = useUnoGameStore((state) => state.players);
-  const deck = useUnoGameStore((state) => state.deck);
-  const pile = useUnoGameStore((state) => state.pile);
-  const hands = useUnoGameStore((state) => state.hands);
-
+  const updateUno = useUnoGameStore((state) => state.updateUno);
   const serve = useUnoGameStore((state) => state.serve);
   const saveServe = useUnoGameStore((state) => state.saveServe);
-  const navigate = useNavigate();
 
   const { isLoading, isError } = useQuery({
     queryKey: ["unos", id],
@@ -94,10 +97,11 @@ export function Uno() {
         navigate("/");
       }
 
-      init(data);
-
       if (data.state === "serving") {
+        init(data);
         clientSocket.emit("order-serve-card", id);
+      } else {
+        updateUno(data);
       }
     },
   });
@@ -115,6 +119,14 @@ export function Uno() {
       });
     }
   }, [id, players]);
+
+  useEffect(() => {
+    if (id) {
+      clientSocket.on(`uno-updated_${id}`, (data: Uno) => {
+        updateUno(data);
+      });
+    }
+  }, [id]);
 
   useEffect(() => {
     if (player?._id && players.length) {
@@ -149,6 +161,7 @@ export function Uno() {
           justifyContent="space-between"
         >
           <PlayersSeat />
+          <Typography level="body-lg">{turnPlayerName} turn</Typography>
           <Stack
             direction="row"
             gap={10}
@@ -173,8 +186,27 @@ export function Uno() {
   );
 }
 
+function useDrawCard() {
+  const mutation = useMutation({
+    mutationFn: drawCard,
+  });
+
+  return mutation;
+}
+
 function DrawPile() {
+  const unoId = useUnoGameStore((state) => state._id);
   const deck = useUnoGameStore((state) => state.deck);
+  const turn = useUnoGameStore((state) => state.turn);
+  const players = useUnoGameStore((state) => state.players);
+  const { player } = usePlayer();
+  const canDraw = turn === players.findIndex((p) => p._id === player?._id);
+  const mutation = useDrawCard();
+  const draw = () => {
+    if (canDraw) {
+      mutation.mutate(unoId);
+    }
+  };
 
   return (
     <Box
@@ -205,7 +237,7 @@ function DrawPile() {
               }}
               src={`/static/uno/card_back.png`}
               draggable={false}
-              // onClick={drawCard}
+              onClick={draw}
             />
           </Box>
         </Flipped>
@@ -217,7 +249,7 @@ function DrawPile() {
 function DiscardPile() {
   const pile = useUnoGameStore((state) => state.pile);
   const direction = useUnoGameStore((state) => state.direction);
-  const deg = direction === -1 ? 0 : 180;
+  const deg = direction === 1 ? 0 : 180;
 
   return (
     <Box
@@ -244,6 +276,8 @@ function DiscardPile() {
 
 function PlayersSeat() {
   const players = useUnoGameStore((state) => state.players);
+  const turn = useUnoGameStore((state) => state.turn);
+  const turnPlayer = players[turn];
   const { player: currentPlayer } = usePlayer();
   const playerIndex = players.findIndex((p) => p._id === currentPlayer?._id);
   const playersInOrder = [
@@ -274,7 +308,16 @@ function PlayersSeat() {
           gap={2}
         >
           <Stack>
-            <img src={player.avatar} style={{ width: 50, height: 50 }} />
+            <img
+              src={player.avatar}
+              style={{
+                width: 50,
+                height: 50,
+                border:
+                  turnPlayer._id === player._id ? "3px solid #00C3E5" : "none",
+                borderRadius: "50%",
+              }}
+            />
             <Typography>{player.name}</Typography>
           </Stack>
 

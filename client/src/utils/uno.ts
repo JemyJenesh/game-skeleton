@@ -34,6 +34,7 @@ type UnoGameState = {
   serveIndex: number;
 
   init: (uno: Uno) => void;
+  updateUno: (uno: Uno) => void;
   serve: () => void;
   saveServe: () => void;
   // discard: (card: UnoCard) => void;
@@ -63,6 +64,14 @@ export const useUnoGameStore = create<UnoGameState>()((set, get) => ({
         ...uno,
         deck,
         pile: [pile],
+      };
+    }),
+
+  updateUno: (uno) =>
+    set((state) => {
+      return {
+        ...state,
+        ...uno,
       };
     }),
 
