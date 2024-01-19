@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { clientSocket } from "../../App";
 import { PageTransition } from "../../components";
 import { usePlayer } from "../../hooks";
+import { ArrowClockwiseIcon } from "../../icons";
 import { UnoCard, getUno } from "../../utils/api";
 import { useUnoGameStore } from "../../utils/uno";
 
@@ -158,8 +159,8 @@ export function Uno() {
               px: 10,
             }}
           >
-            <DrawPile deck={deck} />
-            <DiscardPile pile={pile} />
+            <DrawPile />
+            <DiscardPile />
             <div style={{ width: 72 }} />
           </Stack>
 
@@ -172,7 +173,9 @@ export function Uno() {
   );
 }
 
-function DrawPile({ deck = [] }: { deck: UnoCard[] }) {
+function DrawPile() {
+  const deck = useUnoGameStore((state) => state.deck);
+
   return (
     <Box
       sx={{
@@ -211,11 +214,18 @@ function DrawPile({ deck = [] }: { deck: UnoCard[] }) {
   );
 }
 
-function DiscardPile({ pile = [] }: { pile: UnoCard[] }) {
+function DiscardPile() {
+  const pile = useUnoGameStore((state) => state.pile);
+  const direction = useUnoGameStore((state) => state.direction);
+  const deg = direction === -1 ? 0 : 180;
+
   return (
     <Box
       sx={{ display: "grid", placeItems: "center", gridTemplateAreas: "stack" }}
     >
+      <Box sx={{ position: "absolute", transform: `rotateY(${deg}deg)` }}>
+        <ArrowClockwiseIcon size={300} />
+      </Box>
       {pile?.map((card) => (
         <Flipped key={card._id} flipId={card._id}>
           <Box
