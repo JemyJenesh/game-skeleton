@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from "@mui/joy";
+import { Box, CircularProgress, Stack, Typography } from "@mui/joy";
 import React, { useEffect } from "react";
 import { Flipped, Flipper } from "react-flip-toolkit";
 import { useMutation, useQuery } from "react-query";
@@ -70,7 +70,17 @@ function PlayerCards({ cards }: { cards: UnoCard[] }) {
   };
 
   return (
-    <Box>
+    <Box sx={{ position: "relative" }}>
+      {mutation.isLoading && (
+        <CircularProgress
+          sx={{
+            position: "absolute",
+            top: -48,
+            left: "50%",
+            transform: "translateX(-50%)",
+          }}
+        />
+      )}
       <Stack direction="row">
         {cards?.map((card) => (
           <Box
@@ -254,6 +264,7 @@ function DrawPile() {
     <Box
       sx={{
         display: "flex",
+        position: "relative",
         height: 100,
         width: 72,
         alignSelf: "self-start",
@@ -261,6 +272,9 @@ function DrawPile() {
           "perspective(350px) rotateZ(-20deg) rotateX(-10deg) rotateY(15deg)",
       }}
     >
+      {mutation.isLoading && (
+        <CircularProgress sx={{ position: "absolute", top: -48 }} />
+      )}
       {deck?.map((card) => (
         <Flipped key={card._id} flipId={card._id}>
           <Box

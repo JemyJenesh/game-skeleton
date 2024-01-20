@@ -1,4 +1,4 @@
-import { Button, IconButton, Stack, Typography } from "@mui/joy";
+import { Button, IconButton, Stack, Tooltip, Typography } from "@mui/joy";
 import React, { useEffect } from "react";
 import { useMutation } from "react-query";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
@@ -94,13 +94,15 @@ export function UnoRoom() {
             <PlayerCard key={player._id} player={player} />
           ))}
           {isJoinVisible && (
-            <IconButton
-              disabled={false}
-              variant="outlined"
-              onClick={() => joinMutation.mutate(id!)}
-            >
-              <PlusIcon size={128} />
-            </IconButton>
+            <Tooltip title="Join Game">
+              <IconButton
+                disabled={false}
+                variant="outlined"
+                onClick={() => joinMutation.mutate(id!)}
+              >
+                <PlusIcon size={128} />
+              </IconButton>
+            </Tooltip>
           )}
         </Stack>
         <Stack direction={"row"} gap={3}>
