@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import { UnoCard } from "../models";
 import { PlayerService, UnoService, shuffleDeck } from "../services";
 import { getServerSocket } from "../services/socket";
 
@@ -103,42 +104,46 @@ unosRouter.put("/:id/draw", async (req: Request, res: Response) => {
   return res.json(uno);
 });
 
+type UnoCardWithId = UnoCard & { _id: string };
+
 unosRouter.put("/:id/discard", async (req: Request, res: Response) => {
   const id = req.params.id;
-  const discardedCard = req.body.card;
+  const discardedCard: UnoCardWithId = req.body.card;
   const io = getServerSocket();
   const playerId = req.cookies.playerId;
-  if (!playerId) {
-    return res.json(null);
-  }
+  if (!playerId) return res.json(null);
   if (!id) return res.status(400).json({ message: "id is missing" });
-
   const uno = await UnoService.findById(id);
   if (!uno) return res.status(404).end();
 
-  const { pile = [], players = [], hands = [], turn } = uno;
+  const { pile = [], players = [], hands = [], turn, direction } = uno;
   const playerIndex = players.findIndex((p) => p._id.toString() === playerId);
-  if (playerIndex !== turn) {
-    return res.json(uno);
+  if (playerIndex !== turn) return res.json(uno);
+
+  let newTurn = (turn + uno.direction + players.length) % players.length;
+  let newDirection = direction;
+  if (discardedCard.value === "reverse") {
+    newDirection = direction === 1 ? -1 : 1;
+    newTurn = (turn + newDirection + players.length) % players.length;
   }
 
   const playerHand = hands[playerIndex]?.filter(
-    (card) => (card as any)._id.toString() !== discardedCard._id
+    (card) => (card as UnoCardWithId)._id.toString() !== discardedCard._id
   );
   const won = playerHand.length === 0;
   const newHands = hands.map((hand, i) =>
     i === playerIndex ? playerHand : hand
   );
-  const newTurn = (turn + uno.direction + players.length) % players.length;
+
   const updatedUno = await UnoService.update(id, {
     pile: [...pile, discardedCard],
     hands: newHands,
     turn: newTurn,
+    direction: newDirection,
     winner: won ? playerId : uno.winner,
     state: won ? "over" : uno.state,
   });
   io.emit(`uno-updated_${id}`, updatedUno);
-
   return res.json(updatedUno);
 });
 
