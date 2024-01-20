@@ -8,7 +8,7 @@ import Sheet from "@mui/joy/Sheet";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { PageTransition } from "../../components";
 import { usePlayer } from "../../hooks";
 import { avatars } from "../../utils";
@@ -16,6 +16,7 @@ import { PlayerAvatar } from "./components";
 
 export function PlayerCreate() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(false);
   const { setPlayer } = usePlayer();
 
@@ -45,7 +46,8 @@ export function PlayerCreate() {
       .then((res) => res.json())
       .then((data) => {
         setPlayer(data);
-        navigate("/");
+        const redirect = searchParams.get("r");
+        navigate(redirect ?? "/");
       })
       .catch((err) => {
         console.log(err);
