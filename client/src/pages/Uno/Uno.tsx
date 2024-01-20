@@ -232,9 +232,16 @@ function DrawPile() {
   const state = useUnoGameStore((state) => state.state);
   const deck = useUnoGameStore((state) => state.deck);
   const turn = useUnoGameStore((state) => state.turn);
+  const hands = useUnoGameStore((state) => state.hands);
+  const pile = useUnoGameStore((state) => state.pile);
+  const topCard = pile[pile.length - 1];
   const players = useUnoGameStore((state) => state.players);
   const { player } = usePlayer();
-  const canDraw = turn === players.findIndex((p) => p._id === player?._id);
+  const isMyTurn = turn === players.findIndex((p) => p._id === player?._id);
+  const hasMatch = hands[turn].some(
+    (card) => card.value === topCard.value || card.color === topCard.color
+  );
+  const canDraw = isMyTurn && !hasMatch;
   const mutation = useDrawCard();
   const draw = () => {
     if (!!winner || state !== "playing") return;
