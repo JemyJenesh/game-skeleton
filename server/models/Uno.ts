@@ -18,9 +18,9 @@ export const UNO_VALUES = [
   "7",
   "8",
   "9",
-  // "draw-two",
-  // "skip",
-  // "reverse",
+  "draw-two",
+  "skip",
+  "reverse",
   // "wild",
   // "wild-four",
 ] as const;
