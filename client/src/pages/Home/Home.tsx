@@ -31,7 +31,14 @@ export function Home() {
         <Stack>
           <PlayerCard player={player!} />
         </Stack>
-        <Stack>
+        <Stack direction={"row"} gap={3}>
+          <GameCard
+            title="Bingo"
+            handleClick={() => {
+              window.location.href = "https://bingo-app-k6et.onrender.com/";
+            }}
+            isLoading={false}
+          />
           <GameCard
             title="Uno"
             handleClick={() => mutation.mutate({})}
