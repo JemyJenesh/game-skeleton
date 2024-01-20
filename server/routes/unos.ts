@@ -125,6 +125,9 @@ unosRouter.put("/:id/discard", async (req: Request, res: Response) => {
   if (discardedCard.value === "reverse") {
     newDirection = direction === 1 ? -1 : 1;
     newTurn = (turn + newDirection + players.length) % players.length;
+  } else if (discardedCard.value === "skip") {
+    newTurn = (turn + newDirection + players.length) % players.length;
+    newTurn = (newTurn + newDirection + players.length) % players.length;
   }
 
   const playerHand = hands[playerIndex]?.filter(
