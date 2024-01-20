@@ -77,7 +77,10 @@ unosRouter.put("/:id/draw", async (req: Request, res: Response) => {
     return res.json(uno);
   }
 
+  const topPileCard = pile[pile.length - 1];
   const card = deck.pop()!;
+  const isValidCard =
+    topPileCard.color === card.color || topPileCard.value === card.value;
   if (!deck.length) {
     const newPileCard = pile.pop()!;
     deck = shuffleDeck(pile);
@@ -92,7 +95,7 @@ unosRouter.put("/:id/draw", async (req: Request, res: Response) => {
   const updatedUno = await UnoService.update(uno.id, {
     deck,
     hands: newHands,
-    turn: newTurn,
+    turn: isValidCard ? turn : newTurn,
     pile,
   });
   io.emit(`uno-updated_${id}`, updatedUno);

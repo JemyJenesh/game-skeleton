@@ -238,7 +238,7 @@ function DrawPile() {
   const players = useUnoGameStore((state) => state.players);
   const { player } = usePlayer();
   const isMyTurn = turn === players.findIndex((p) => p._id === player?._id);
-  const hasMatch = hands[turn].some(
+  const hasMatch = hands[turn]?.some(
     (card) => card.value === topCard.value || card.color === topCard.color
   );
   const canDraw = isMyTurn && !hasMatch;
