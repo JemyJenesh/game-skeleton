@@ -365,7 +365,7 @@ function PlayersSeat() {
                   display: "inline-block",
                   transition: "transform 0.2s",
                   "&:not(:first-of-type)": {
-                    marginLeft: "-65px",
+                    marginLeft: winner ? "-20px" : "-65px",
                   },
                 }}
               >

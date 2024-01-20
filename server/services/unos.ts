@@ -40,7 +40,7 @@ function buildDeck() {
   return deck;
 }
 
-function shuffleDeck(deck: UnoCard[]) {
+export function shuffleDeck(deck: UnoCard[]) {
   return deck.sort(() => Math.random() - 0.5);
 }
 

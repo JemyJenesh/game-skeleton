@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { PlayerService, UnoService } from "../services";
+import { PlayerService, UnoService, shuffleDeck } from "../services";
 import { getServerSocket } from "../services/socket";
 
 export const unosRouter = express.Router();
@@ -70,32 +70,34 @@ unosRouter.put("/:id/draw", async (req: Request, res: Response) => {
   const uno = await UnoService.findById(id);
   if (!uno) return res.status(404).end();
 
-  const { deck = [], players = [], hands = [], turn } = uno;
-  if (deck.length) {
-    const card = deck.pop()!;
-    const playerIndex = players.findIndex((p) => p._id.toString() === playerId);
+  let { deck = [], pile = [], players = [], hands = [], turn } = uno;
+  const playerIndex = players.findIndex((p) => p._id.toString() === playerId);
 
-    if (playerIndex !== turn) {
-      return res.json(uno);
-    }
-
-    const playerHand = [...hands[playerIndex], card];
-    const newHands = hands.map((hand, i) =>
-      i === playerIndex ? playerHand : hand
-    );
-    const newTurn =
-      (uno.turn + uno.direction + players.length) % players.length;
-    const updatedUno = await UnoService.update(uno.id, {
-      deck,
-      hands: newHands,
-      turn: newTurn,
-    });
-    io.emit(`uno-updated_${id}`, updatedUno);
-
+  if (playerIndex !== turn) {
     return res.json(uno);
   }
 
-  return res.json(null);
+  const card = deck.pop()!;
+  if (!deck.length) {
+    const newPileCard = pile.pop()!;
+    deck = shuffleDeck(pile);
+    pile = [newPileCard];
+  }
+
+  const playerHand = [...hands[playerIndex], card];
+  const newHands = hands.map((hand, i) =>
+    i === playerIndex ? playerHand : hand
+  );
+  const newTurn = (uno.turn + uno.direction + players.length) % players.length;
+  const updatedUno = await UnoService.update(uno.id, {
+    deck,
+    hands: newHands,
+    turn: newTurn,
+    pile,
+  });
+  io.emit(`uno-updated_${id}`, updatedUno);
+
+  return res.json(uno);
 });
 
 unosRouter.put("/:id/discard", async (req: Request, res: Response) => {
