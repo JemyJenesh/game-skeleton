@@ -19,7 +19,7 @@ function createCard(color: UnoColor, value: UnoValue): UnoCard {
 function buildDeck() {
   let deck: UnoCard[] = [];
 
-  // const actionCards: UnoValue[] = ["draw-two", "skip", "reverse"];
+  const actionCards: UnoValue[] = ["draw-two", "skip", "reverse"];
   for (const color of UNO_COLORS) {
     // if (color === "wild") continue;
     deck.push(createCard(color, UNO_VALUES[0]));
@@ -27,10 +27,10 @@ function buildDeck() {
       deck.push(createCard(color, UNO_VALUES[i]));
       deck.push(createCard(color, UNO_VALUES[i]));
     }
-    // for (let action of actionCards) {
-    //   deck.push(createCard(color, action));
-    //   deck.push(createCard(color, action));
-    // }
+    for (let action of actionCards) {
+      deck.push(createCard(color, action));
+      deck.push(createCard(color, action));
+    }
   }
   // for (let i = 0; i < 4; i++) {
   //   deck.push(createCard("wild", "wild"));
@@ -41,7 +41,13 @@ function buildDeck() {
 }
 
 export function shuffleDeck(deck: UnoCard[]) {
-  return deck.sort(() => Math.random() - 0.5);
+  const shuffled = deck.sort(() => Math.random() - 0.5);
+  const actionCards: UnoValue[] = ["draw-two", "skip", "reverse"];
+  const lastCard = shuffled[shuffled.length - 1];
+  if (actionCards.includes(lastCard.value)) {
+    shuffleDeck(shuffled);
+  }
+  return shuffled;
 }
 
 export const UnoService = {
