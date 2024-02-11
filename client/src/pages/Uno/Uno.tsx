@@ -1,3 +1,4 @@
+import CachedIcon from "@mui/icons-material/Cached";
 import { Box, CircularProgress, Stack, Typography } from "@mui/joy";
 import React, { useEffect } from "react";
 import { Flipped, Flipper } from "react-flip-toolkit";
@@ -6,7 +7,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { clientSocket } from "../../App";
 import { PageTransition } from "../../components";
 import { usePlayer } from "../../hooks";
-import { ArrowClockwiseIcon } from "../../icons";
 import { Uno, UnoCard, discardCard, drawCard, getUno } from "../../utils/api";
 import { useUnoGameStore } from "../../utils/uno";
 
@@ -311,8 +311,13 @@ function DiscardPile() {
     <Box
       sx={{ display: "grid", placeItems: "center", gridTemplateAreas: "stack" }}
     >
-      <Box sx={{ position: "absolute", transform: `rotateY(${deg}deg)` }}>
-        <ArrowClockwiseIcon size={300} />
+      <Box
+        sx={{
+          position: "absolute",
+          transform: `rotateY(${deg}deg)`,
+        }}
+      >
+        <CachedIcon sx={{ height: 500, width: 500 }} />
       </Box>
       {pile?.map((card) => (
         <Flipped key={card._id} flipId={card._id}>

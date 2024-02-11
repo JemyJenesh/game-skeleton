@@ -1,12 +1,12 @@
-import { Button, IconButton, Stack, Tooltip, Typography } from "@mui/joy";
+import AddIcon from "@mui/icons-material/Add";
+import { Button, Stack, Typography } from "@mui/joy";
 import React, { useEffect } from "react";
 import { useMutation } from "react-query";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { clientSocket, queryClient } from "../../App";
-import { PageTransition } from "../../components";
+import { CopyButton, PageTransition } from "../../components";
 import { usePlayer } from "../../hooks";
 import { useUno } from "../../hooks/uno";
-import { PlusIcon } from "../../icons";
 import { Uno, joinUno, serveCard } from "../../utils/api";
 import { PlayerCard } from "./components";
 
@@ -93,27 +93,9 @@ export function UnoRoom() {
           {players.map((player) => (
             <PlayerCard key={player._id} player={player} />
           ))}
-          {isJoinVisible && (
-            <Tooltip title="Join Game">
-              <IconButton
-                disabled={false}
-                variant="outlined"
-                onClick={() => joinMutation.mutate(id!)}
-              >
-                <PlusIcon size={128} />
-              </IconButton>
-            </Tooltip>
-          )}
         </Stack>
         <Stack direction={"row"} gap={3}>
-          <Button
-            variant="soft"
-            onClick={() => {
-              navigator.clipboard.writeText(window.location.href);
-            }}
-          >
-            Share Link
-          </Button>
+          <CopyButton text={window.location.href}>Copy Link</CopyButton>
           {showStart && (
             <Button
               disabled={!canStart}
@@ -122,6 +104,15 @@ export function UnoRoom() {
               Start Game
             </Button>
           )}
+
+          <Button
+            startDecorator={<AddIcon />}
+            disabled={!isJoinVisible}
+            loading={joinMutation.isLoading}
+            onClick={() => joinMutation.mutate(id!)}
+          >
+            Join
+          </Button>
         </Stack>
       </Stack>
     </PageTransition>

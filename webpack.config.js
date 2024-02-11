@@ -9,6 +9,9 @@ module.exports = {
     publicPath: "/",
   },
   resolve: {
+    alias: {
+      "@mui/material": "@mui/joy",
+    },
     extensions: [".ts", ".tsx", ".js", ".jsx"],
   },
   module: {
