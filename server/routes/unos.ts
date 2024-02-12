@@ -127,6 +127,9 @@ unosRouter.put("/:id/discard", async (req: Request, res: Response) => {
   const playerIndex = players.findIndex((p) => p._id.toString() === playerId);
   if (playerIndex !== turn) return res.json(uno);
 
+  let newTurn = (turn + direction + players.length) % players.length;
+  let newDirection = direction;
+  let newDeck = [...deck];
   const playerHand = hands[playerIndex]?.filter(
     (card) => (card as UnoCardWithId)._id.toString() !== discardedCard._id
   );
@@ -134,30 +137,28 @@ unosRouter.put("/:id/discard", async (req: Request, res: Response) => {
   let newHands = hands.map((hand, i) =>
     i === playerIndex ? playerHand : hand
   );
-  let newTurn = (turn + uno.direction + players.length) % players.length;
-  let newDirection = direction;
-  let newDeck = deck;
-  let newPile = pile;
+  let newPile = [...pile, discardedCard];
   if (discardedCard.value === "reverse") {
     newDirection = direction === 1 ? -1 : 1;
     newTurn = (turn + newDirection + players.length) % players.length;
   } else if (discardedCard.value === "skip") {
     newTurn = (newTurn + newDirection + players.length) % players.length;
   } else if (discardedCard.value === "draw-two") {
-    if (deck.length <= 2) {
+    if (newDeck.length <= 2) {
       const newPileCard = pile.pop()!;
-      newDeck = shuffleDeck([...pile, ...deck]);
+      newDeck = shuffleDeck([...pile, ...newDeck]);
       newPile = [newPileCard];
     }
     newHands = newHands.map((hand, i) =>
-      i === newTurn ? [...hand, ...deck.slice(-2)] : hand
+      i === newTurn ? [...hand, ...newDeck.slice(-2)] : hand
     );
-    newDeck = deck.slice(0, -2);
+    newDeck = newDeck.slice(0, -2);
     newTurn = (newTurn + newDirection + players.length) % players.length;
   }
 
   const updatedUno = await UnoService.update(id, {
-    pile: [...pile, discardedCard],
+    pile: newPile,
+    deck: newDeck,
     hands: newHands,
     turn: newTurn,
     direction: newDirection,
