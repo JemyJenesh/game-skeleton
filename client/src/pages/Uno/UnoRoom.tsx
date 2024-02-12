@@ -96,23 +96,23 @@ export function UnoRoom() {
         </Stack>
         <Stack direction={"row"} gap={3}>
           <CopyButton text={window.location.href}>Copy Link</CopyButton>
-          {showStart && (
+          {showStart ? (
             <Button
               disabled={!canStart}
               onClick={() => serveMutation.mutate(id!)}
             >
               Start Game
             </Button>
+          ) : (
+            <Button
+              startDecorator={<AddIcon />}
+              disabled={!isJoinVisible}
+              loading={joinMutation.isLoading}
+              onClick={() => joinMutation.mutate(id!)}
+            >
+              Join
+            </Button>
           )}
-
-          <Button
-            startDecorator={<AddIcon />}
-            disabled={!isJoinVisible}
-            loading={joinMutation.isLoading}
-            onClick={() => joinMutation.mutate(id!)}
-          >
-            Join
-          </Button>
         </Stack>
       </Stack>
     </PageTransition>
