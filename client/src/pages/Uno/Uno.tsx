@@ -208,7 +208,7 @@ export function Uno() {
             <Typography level="body-lg">{turnPlayerName} turn</Typography>
           )}
           {!!winner && (
-            <Typography level="body-lg">{winner.name} won the game!</Typography>
+            <Typography level="h2">{winner.name} won the game!</Typography>
           )}
           <Stack
             direction="row"
