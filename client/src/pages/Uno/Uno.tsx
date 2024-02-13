@@ -56,12 +56,12 @@ function PlayerCards({ cards }: { cards: UnoCard[] }) {
   const { player } = usePlayer();
 
   const playerIndex = players.findIndex((p) => p._id === player?._id);
-
+  const isMyTurn = turn === playerIndex;
   const mutation = useDiscardCard();
   const discard = (card: UnoCard) => {
     if (!!winner || state !== "playing") return;
     if (
-      turn === playerIndex &&
+      isMyTurn &&
       (playingCard.color === card.color || playingCard.value === card.value)
     ) {
       mutation.mutate({ id: unoId, card });
@@ -80,7 +80,14 @@ function PlayerCards({ cards }: { cards: UnoCard[] }) {
           }}
         />
       )}
-      <Stack direction="row">
+      <Stack
+        direction="row"
+        sx={{
+          opacity: isMyTurn ? 1 : 0.75,
+          transition: "transform 0.2s",
+          transform: !isMyTurn ? "scale(0.75) translateY(50%)" : undefined,
+        }}
+      >
         {cards?.map((card) => (
           <Box
             key={card._id}
