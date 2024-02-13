@@ -1,7 +1,8 @@
+import AspectRatio from "@mui/joy/AspectRatio";
 import Button from "@mui/joy/Button";
 import Card from "@mui/joy/Card";
-import CardActions from "@mui/joy/CardActions";
 import CardContent from "@mui/joy/CardContent";
+import CardOverflow from "@mui/joy/CardOverflow";
 import Typography from "@mui/joy/Typography";
 import * as React from "react";
 
@@ -9,10 +10,12 @@ export function GameCard({
   title,
   isLoading = false,
   handleClick,
+  img,
 }: {
   title: string;
   isLoading: boolean;
   handleClick: () => void;
+  img?: string;
 }) {
   return (
     <Card
@@ -21,22 +24,24 @@ export function GameCard({
         width: 250,
       }}
     >
-      <CardContent>
-        <Typography textAlign="center" level="title-md">
-          {title}
-        </Typography>
-      </CardContent>
-      <CardActions buttonFlex="1 0 100px">
+      {img && (
+        <CardOverflow>
+          <AspectRatio>
+            <img src={img} alt={title} />
+          </AspectRatio>
+        </CardOverflow>
+      )}
+      <CardContent orientation="horizontal" sx={{ alignItems: "center" }}>
+        <Typography level="body-lg">{title}</Typography>
         <Button
-          variant="solid"
-          color="primary"
+          sx={{ ml: "auto", alignSelf: "center" }}
           loading={isLoading}
           disabled={isLoading}
           onClick={handleClick}
         >
           Play
         </Button>
-      </CardActions>
+      </CardContent>
     </Card>
   );
 }

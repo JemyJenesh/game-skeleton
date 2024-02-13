@@ -17,6 +17,11 @@
       "@mui/material": ["./node_modules/@mui/joy"]
     }
   },
-  "include": ["server/**/*.ts", "client/**/*.ts", "client/**/*.tsx"],
+  "include": [
+    "server/**/*.ts",
+    "client/**/*.ts",
+    "client/**/*.tsx",
+    "index.d.ts"
+  ],
   "exclude": ["node_modules"]
 }

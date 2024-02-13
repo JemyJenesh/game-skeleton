@@ -5,6 +5,8 @@ import { UseMutationResult, useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { PageTransition } from "../../components";
 import { usePlayer } from "../../hooks";
+import bingoImg from "../../img/bingo.jpg";
+import unoImg from "../../img/uno.jpg";
 import { createUno } from "../../utils/api";
 import { GameCard, PlayerCard } from "./components";
 
@@ -34,6 +36,7 @@ export function Home() {
         <Stack direction={"row"} gap={3}>
           <GameCard
             title="Bingo"
+            img={bingoImg}
             handleClick={() => {
               window.location.href = "https://bingo-app-k6et.onrender.com/";
             }}
@@ -41,6 +44,7 @@ export function Home() {
           />
           <GameCard
             title="Uno"
+            img={unoImg}
             handleClick={() => mutation.mutate({})}
             isLoading={mutation.isLoading}
           />
