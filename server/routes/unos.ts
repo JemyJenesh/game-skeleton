@@ -1,8 +1,8 @@
 import express, { Request, Response } from "express";
+import Socket from "../core/Socket";
 import { UnoCard } from "../models";
 import { PlayerRepository } from "../repositories/PlayerRepository";
 import { UnoService, shuffleDeck } from "../services";
-import { getServerSocket } from "../services/socket";
 
 export const unosRouter = express.Router();
 
@@ -32,7 +32,7 @@ unosRouter.post("/", async (req: Request, res: Response) => {
 
 unosRouter.post("/:id/join", async (req: Request, res: Response) => {
   const id = req.params.id;
-  const io = getServerSocket();
+  const io = Socket.io;
 
   const playerId = req.cookies.playerId;
   if (!playerId) {
@@ -51,7 +51,7 @@ unosRouter.post("/:id/join", async (req: Request, res: Response) => {
 
 unosRouter.put("/:id/serve", async (req: Request, res: Response) => {
   const id = req.params.id;
-  const io = getServerSocket();
+  const io = Socket.io;
 
   if (!id) return res.status(400).json({ message: "id is missing" });
   const uno = await UnoService.update(id, { state: "serving" });
@@ -62,7 +62,7 @@ unosRouter.put("/:id/serve", async (req: Request, res: Response) => {
 
 unosRouter.put("/:id/draw", async (req: Request, res: Response) => {
   const id = req.params.id;
-  const io = getServerSocket();
+  const io = Socket.io;
   const playerId = req.cookies.playerId;
   if (!playerId) {
     return res.json(null);
@@ -110,7 +110,7 @@ type UnoCardWithId = UnoCard & { _id: string };
 unosRouter.put("/:id/discard", async (req: Request, res: Response) => {
   const id = req.params.id;
   const discardedCard: UnoCardWithId = req.body.card;
-  const io = getServerSocket();
+  const io = Socket.io;
   const playerId = req.cookies.playerId;
   if (!playerId) return res.json(null);
   if (!id) return res.status(400).json({ message: "id is missing" });
@@ -173,7 +173,7 @@ unosRouter.put("/:id/discard", async (req: Request, res: Response) => {
 unosRouter.put("/:id", async (req: Request, res: Response) => {
   const id = req.params.id;
   const body = req.body;
-  const io = getServerSocket();
+  const io = Socket.io;
 
   if (!id || !body)
     return res.status(400).json({ message: "id or body missing" });
