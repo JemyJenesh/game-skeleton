@@ -11,6 +11,7 @@ module.exports = {
   resolve: {
     alias: {
       "@mui/material": "@mui/joy",
+      typings: path.resolve(__dirname, "typings/"),
     },
     extensions: [".ts", ".tsx", ".js", ".jsx"],
   },

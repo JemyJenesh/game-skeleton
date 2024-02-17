@@ -13,8 +13,10 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react",
+    "baseUrl": "./",
     "paths": {
-      "@mui/material": ["./node_modules/@mui/joy"]
+      "@mui/material": ["./node_modules/@mui/joy"],
+      "typings/*": ["typings/*"]
     }
   },
   "include": [

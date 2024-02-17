@@ -1,6 +1,7 @@
-import { Player, PlayerInput } from "../models";
+import { PlayerInput } from "typings";
+import { Player } from "../models";
 
-export const PlayerService = {
+export const PlayerRepository = {
   async findById(id: string) {
     return await Player.findById(id);
   },

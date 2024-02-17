@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { UnoCard } from "../models";
-import { PlayerService, UnoService, shuffleDeck } from "../services";
+import { PlayerRepository } from "../repositories/PlayerRepository";
+import { UnoService, shuffleDeck } from "../services";
 import { getServerSocket } from "../services/socket";
 
 export const unosRouter = express.Router();
@@ -41,7 +42,7 @@ unosRouter.post("/:id/join", async (req: Request, res: Response) => {
   if (!id) return res.status(400).json({ message: "id is missing" });
 
   const uno = await UnoService.join(id, playerId);
-  const player = await PlayerService.findById(playerId);
+  const player = await PlayerRepository.findById(playerId);
 
   io.emit(`player-joined_${id}`, player);
 
