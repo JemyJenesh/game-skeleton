@@ -16,7 +16,9 @@
     "baseUrl": "./",
     "paths": {
       "@mui/material": ["./node_modules/@mui/joy"],
-      "typings/*": ["typings/*"]
+      "typings/*": ["typings/*"],
+      "client/*": ["client/src/*"],
+      "server/*": ["server/*"]
     }
   },
   "include": [

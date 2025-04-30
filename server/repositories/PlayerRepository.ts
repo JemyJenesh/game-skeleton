@@ -3,7 +3,7 @@ import { Player } from "../models";
 
 export const PlayerRepository = {
   async findById(id: string) {
-    return await Player.findById(id);
+    return await Player.findById(id).lean();
   },
 
   async create(playerInput: PlayerInput) {

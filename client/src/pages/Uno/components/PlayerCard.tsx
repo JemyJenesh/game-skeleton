@@ -3,8 +3,8 @@ import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import Typography from "@mui/joy/Typography";
 import React from "react";
+import { Player } from "typings/Player";
 import { usePlayer } from "../../../hooks";
-import { Player } from "../../../types";
 
 export function PlayerCard({ player }: { player: Player }) {
   const { _id, avatar, name } = player;

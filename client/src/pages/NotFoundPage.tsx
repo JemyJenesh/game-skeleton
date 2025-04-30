@@ -1,9 +1,9 @@
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
 import Typography from "@mui/joy/Typography";
+import { PageTransition } from "client/components";
 import React from "react";
 import { Link } from "react-router-dom";
-import { PageTransition } from "../components";
 
 export function NotFoundPage() {
   return (

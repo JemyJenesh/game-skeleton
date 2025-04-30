@@ -1,6 +1,4 @@
 import Box from "@mui/joy/Box";
-import Chip from "@mui/joy/Chip";
-import Sheet from "@mui/joy/Sheet";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import React from "react";
@@ -10,7 +8,7 @@ import { usePlayer } from "../../hooks";
 export function PlayerView() {
   const { player } = usePlayer();
   if (!player) return null;
-  const { avatar, createdAt, name, played, tag, wins } = player;
+  const { avatar, createdAt, name } = player;
 
   return (
     <PageTransition>
@@ -23,7 +21,7 @@ export function PlayerView() {
             <Box sx={{ mb: 1 }}>
               <Stack gap={0} sx={{ pb: 1 }}>
                 <Typography level="h3">{name}</Typography>
-                <Chip color="primary">{tag}</Chip>
+                {/* <Chip color="primary">{tag}</Chip> */}
               </Stack>
               <Typography>
                 Joined at{" "}
@@ -33,14 +31,14 @@ export function PlayerView() {
               </Typography>
             </Box>
           </Stack>
-          <Sheet variant="soft" sx={{ p: 2 }}>
+          {/* <Sheet variant="soft" sx={{ p: 2 }}>
             <Typography>
               <Typography fontWeight="bold">{played}</Typography> games played.
             </Typography>
             <Typography>
               <Typography fontWeight="bold">{wins}</Typography> games won.
             </Typography>
-          </Sheet>
+          </Sheet> */}
         </Stack>
       </Box>
     </PageTransition>

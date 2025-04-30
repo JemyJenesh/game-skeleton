@@ -12,6 +12,7 @@ module.exports = {
     alias: {
       "@mui/material": "@mui/joy",
       typings: path.resolve(__dirname, "typings/"),
+      client: path.resolve(__dirname, "./client/src"),
     },
     extensions: [".ts", ".tsx", ".js", ".jsx"],
   },

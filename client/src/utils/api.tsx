@@ -1,7 +1,8 @@
 import Axios from "axios";
-import { Player } from "../types";
+import { Bingo } from "typings/Bingo";
+import { Player } from "typings/Player";
 
-const axios = Axios.create({
+export const axios = Axios.create({
   withCredentials: true,
 });
 
@@ -54,9 +55,17 @@ export async function createUno(): Promise<Uno> {
   const res = await axios.post("/api/unos");
   return res.data;
 }
+export async function createBingo(): Promise<Uno> {
+  const res = await axios.post("/api/bingos");
+  return res.data;
+}
 
 export async function getUno(id: string): Promise<Uno> {
   const res = await axios.get(`/api/unos/${id}`);
+  return res.data;
+}
+export async function getBingo(id: string): Promise<Bingo> {
+  const res = await axios.get(`/api/bingos/${id}`);
   return res.data;
 }
 

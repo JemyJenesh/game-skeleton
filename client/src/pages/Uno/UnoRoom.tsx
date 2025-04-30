@@ -91,7 +91,7 @@ export function UnoRoom() {
         <Typography level="h3">Waiting for players...</Typography>
         <Stack gap={3} direction={"row"}>
           {players.map((player) => (
-            <PlayerCard key={player._id} player={player} />
+            <PlayerCard key={`${player._id}`} player={player} />
           ))}
         </Stack>
         <Stack direction={"row"} gap={3}>

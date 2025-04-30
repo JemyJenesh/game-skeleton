@@ -370,7 +370,7 @@ function PlayersSeat() {
     >
       {playersInOrder.map((player, i) => (
         <Stack
-          key={player._id}
+          key={`${player._id}`}
           direction={"row"}
           sx={{
             display: player._id === currentPlayer?._id ? "none" : "flex",

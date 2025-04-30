@@ -1,5 +1,5 @@
+import { Player } from "typings/Player";
 import { create } from "zustand";
-import { Player } from "../types";
 import { Uno, UnoCard, updateUno } from "./api";
 
 export function getRandomInt(min: number, max: number) {

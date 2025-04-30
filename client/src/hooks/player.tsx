@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Player } from "../types";
+import { Player } from "typings/Player";
 
 type ContextProps = {
   player: Player | null;

@@ -12,3 +12,10 @@ export type PlayerInput = {
   name: string;
   avatar: string;
 };
+
+export type BingoPlayer = Player & {
+  board: {
+    cells: string[];
+    markers: boolean[];
+  };
+};

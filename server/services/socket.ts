@@ -1,29 +1,45 @@
-import { Server as NodeServer } from "node:http";
-import { Server } from "socket.io";
+import { Socket } from "socket.io";
+import {
+  SocketClientEvents,
+  SocketEventHandler,
+  SocketServerEvents,
+} from "typings/Socket";
 
-let serverSocket: Server;
+class SocketService {
+  private client: Socket;
 
-export function initSocket(server: NodeServer) {
-  const io = new Server(server, {
-    cors: {
-      origin:
-        process.env.NODE_ENV === "production" ? "" : "http://localhost:3000",
-    },
-  });
-  serverSocket = io;
-
-  io.on("connection", (socket) => {
-    socket.on("order-serve-card", (unoId) => {
-      socket.emit(`serve-card_${unoId}`);
-    });
-  });
-}
-
-export function getServerSocket() {
-  if (!serverSocket) {
-    throw new Error(
-      "Must call module constructor function before you can get the serverSocket instance"
-    );
+  constructor(_client: Socket) {
+    this.client = _client;
   }
-  return serverSocket;
+
+  setupListeners(id: string) {
+    this.client.join(id);
+  }
+
+  async emit<Payload extends unknown>(
+    roomId: string,
+    event: SocketServerEvents,
+    data: Payload
+  ) {
+    this.client.nsp.to(roomId).emit(event, data, (error: string) => {
+      if (error) {
+        console.error("SocketService.emit: ", error);
+      }
+    });
+  }
+
+  on<ReceivedData extends unknown>(
+    event: SocketClientEvents,
+    handler: SocketEventHandler<ReceivedData>
+  ) {
+    this.client.on(event, async (data: ReceivedData) => {
+      try {
+        handler(data);
+      } catch (error) {
+        console.error("SocketService.on: ", error);
+      }
+    });
+  }
 }
+
+export default SocketService;

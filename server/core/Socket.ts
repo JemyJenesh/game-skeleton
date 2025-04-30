@@ -1,4 +1,5 @@
 import { Server as HttpServer } from "http";
+import EventHandlerModule from "server/modules/EventHandlerModule";
 import { Server as SocketServer } from "socket.io";
 
 class Socket {
@@ -19,11 +20,9 @@ class Socket {
   }
 
   private static setupListeners() {
-    this.io.on("connection", (client) => {
-      client.on("order-serve-card", (unoId) => {
-        client.emit(`serve-card_${unoId}`);
-      });
-    });
+    this.io.on("connection", (client) =>
+      EventHandlerModule.onConnection(client)
+    );
   }
 }
 

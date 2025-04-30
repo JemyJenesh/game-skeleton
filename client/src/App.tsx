@@ -2,13 +2,14 @@ import CssBaseline from "@mui/joy/CssBaseline";
 import { AnimatePresence } from "framer-motion";
 import React, { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { Outlet } from "react-router-dom";
 import { io } from "socket.io-client";
 import { usePlayer } from "./hooks";
+import { AppRoutes } from "./routes";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+      retry: false,
       refetchOnWindowFocus: false,
     },
   },
@@ -32,7 +33,7 @@ export function App() {
       <CssBaseline />
       <AnimatePresence mode="wait" initial={false}>
         <QueryClientProvider client={queryClient}>
-          <Outlet />
+          <AppRoutes />
         </QueryClientProvider>
       </AnimatePresence>
     </>

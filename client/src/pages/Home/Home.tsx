@@ -7,7 +7,7 @@ import { PageTransition } from "../../components";
 import { usePlayer } from "../../hooks";
 import bingoImg from "../../img/bingo.jpg";
 import unoImg from "../../img/uno.jpg";
-import { createUno } from "../../utils/api";
+import { createBingo, createUno } from "../../utils/api";
 import { GameCard, PlayerCard } from "./components";
 
 function useCreateUno() {
@@ -22,9 +22,22 @@ function useCreateUno() {
   return mutation;
 }
 
+function useCreateBingo() {
+  const navigate = useNavigate();
+  const mutation: UseMutationResult = useMutation({
+    mutationFn: createBingo,
+    onSuccess: (data) => {
+      if (data._id) navigate(`/bingos/${data._id}/room`);
+    },
+  });
+
+  return mutation;
+}
+
 export function Home() {
   const { player } = usePlayer();
-  const mutation = useCreateUno();
+  const createUnoMutation = useCreateUno();
+  const createBingoMutation = useCreateBingo();
 
   return (
     <PageTransition>
@@ -37,16 +50,14 @@ export function Home() {
           <GameCard
             title="Bingo"
             img={bingoImg}
-            handleClick={() => {
-              window.location.href = "https://bingo-app-k6et.onrender.com/";
-            }}
-            isLoading={false}
+            handleClick={() => createBingoMutation.mutate({})}
+            isLoading={createBingoMutation.isLoading}
           />
           <GameCard
             title="Uno"
             img={unoImg}
-            handleClick={() => mutation.mutate({})}
-            isLoading={mutation.isLoading}
+            handleClick={() => createUnoMutation.mutate({})}
+            isLoading={createUnoMutation.isLoading}
           />
         </Stack>
       </Stack>
